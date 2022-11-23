@@ -1,0 +1,65 @@
+#1. Create a data frame using the table below.
+# a.Write the codes.
+data1 <- data.frame(Respondents = c(seq(1:20)),
+                    Sex = c(2,2,1,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,1,2),
+                    Fathers_Occupation = c(1,3,3,3,1,2,3,1,1,1,3,2,1,3,3,1,3,1,2,1),
+                    Persons_at_home = c(5,7,3,8,5,9,6,7,8,4,7,5,4,7,8,8,3,11,7,6),
+                    Siblings_at_school = c(6,4,4,1,2,1,5,3,1,2,3,2,5,5,2,1,2,5,3,2),
+                    Types_of_houses = c(1,2,3,1,1,3,3,1,2,3,2,3,2,2,3,3,3,3,3,2)
+)
+data1
+
+#b.Describe the data. Get the structure or the summary of the data
+sum_data1 <- summary(data1)
+sum_data1
+
+
+#c. Is the mean number of siblings attending is 5? - No, the mean of siblings at school is 2.95
+
+#d. Extract the 1st two rows and then all the columns using the subsetting functions.
+#Write the codes and its output.
+sub_data1 <- subset(data1[1:2, 1:6])
+sub_data1
+
+#e. Extract 3rd and 5th row with 2nd and 4th column. Write the codes and its
+#result.
+sub_data2 <- subset(data1[c(3,5),c(2,4)])
+sub_data2
+
+#f. Select the variable types of houses then store the vector that results as types_houses.
+#Write the codes.
+sub_data3 <- c(data1$Types_of_houses)
+sub_data3
+
+types_houses <- sub_data3
+types_houses
+
+
+#g. Select only all Males respondent that their father occupation was farmer. Write
+#the codes and its output.
+sub_data4 <- subset(data1[c(1:20), c(2,3)])
+sub_data4
+
+data_male <- sub_data4[data1$Fathers_Occupation == '1',]
+data_male
+
+#h. Select only all females respondent that have greater than or equal to 5 number
+#of siblings attending school. Write the codes and its outputs
+sub_data5 <- subset(data1[c(1:20), c(2,5)])
+sub_data5
+
+data_female <- sub_data5[data1$Siblings_at_school >= '5',]
+data_female
+
+#2. Write a R program to create an empty data frame. Using the following codes:
+df = data.frame(Ints=integer(),
+                Doubles=double(), Characters=character(),
+                Logicals=logical(),
+                Factors=factor(),
+                stringsAsFactors=FALSE)
+paste("Structure of the empty dataframe:")
+paste(str(df))
+#a. Describe the results. - The data shows that there is no rows but has 5 columns with zero(0) factor levels.
+
+#3. Interpret the graph. -From the data it shows that there is more negative tweets than the neutral and positive,
+#and it skewed from left to right within the timeframe of july 15, 2020 - july 21, 2020.
