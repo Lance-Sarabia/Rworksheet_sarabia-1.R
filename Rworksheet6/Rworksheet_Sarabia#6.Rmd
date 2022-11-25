@@ -1,0 +1,164 @@
+---
+title: "Rworksheet#6"
+author: "Lance Y. Sarabia"
+date: "2022-11-25"
+output: pdf_document
+---
+
+---
+title: "Rworksheet#6"
+author: "Lance Y. Sarabia"
+date: "2022-11-25"
+output: pdf_document
+---
+
+```{r, include= TRUE}
+library(ggplot2)
+library(dplyr)
+
+data(mpg)
+
+data2 <- as.data.frame(mpg)
+data2
+```
+\hfill\break
+1. How many columns are in mpg dataset? How about the number of rows? Show thecodes and its result.
+  #ans - it has 11 columns and a rows of 234
+```{r, include= TRUE}
+  mpg_data <- glimpse(data2)
+```
+\hfill\break
+2. Which manufacturer has the most models in this data set? Which model has the most variations? ans - the manufacturer that has the most model are the Dodge while the most variations for model are the caravan2wd
+```{r, include= TRUE}
+  manufact <- mpg_data %>% group_by(manufacturer,model) %>% count()
+  manufact
+  
+  colnames(manufact) <- c("Manufacturer", "Model", "Counts")
+  
+```
+\hfill\break
+a. Group the manufacturers and find the unique models. Copy the codes and result.
+```{r, include= TRUE}
+  data_unique <- mpg_data %>% group_by(manufacturer) %>% 
+    distinct(model) %>% count()
+  data_unique
+ 
+  colnames(data_unique) <- c("Manufacturer", "Unique Counts")
+```
+\hfill\break
+b. Graph the result by using plot() and ggplot(). Write the codes and its result.
+```{r, echo=TRUE}
+plot(manufact)
+```
+
+```{r, echo=TRUE}
+ggplot(manufact, aes(Manufacturer, Model)) + geom_point()
+```
+\hfill\break
+3. Same dataset will be used. You are going to show the relationship of the model and the manufacturer.
+a. What does ggplot(mpg, aes(model, manufacturer)) + geom_point() show? ans - A point graph of model and manufacturer from the mpg data-set that will let the user analyze the data easily
+```{r, include= TRUE}
+  ggplot(data2, aes(model, manufacturer)) + geom_point()
+```
+\hfill\break
+b. For you, is it useful? If not, how could you modify the data to make it more informative? ans - Although the data is already organized, it can still be improved to look more informative 
+by adding a legend to easily distinguish the data from the scatter plot.
+
+\hfill\break
+4. Using the pipe (%>%), group the model and get the number of cars per model. Show codes and its result.
+```{r, include= TRUE}
+  car_model <- mpg_data %>% group_by(model) %>% count()
+  car_model
+  
+  colnames(car_model) <- c("Model", "Counts")
+```
+\hfill\break
+a. Plot using the geom_bar() + coord_flip() just like what is shown below. Show codes and its result.
+```{r, include= TRUE}
+  qplot(model,data = data2, 
+  main = "Number of Cars per Model",
+  xlab = "Model",
+  ylab = "Number of Cars", geom = "bar", fill = manufacturer) + coord_flip()
+```
+\hfill\break
+b. Use only the top 20 observations. Show code and results.
+```{r, include= TRUE}
+  top_data <- car_model[1:20,] %>% top_n(2)
+  top_data
+
+  ggplot(top_data,aes(x = Model, y = Counts)) + 
+    geom_bar(stat = "Identity") +coord_flip()
+```
+\hfill\break
+5. Plot the relationship between cyl - number of cylinders and displ - engine displacement using geom_point with aesthetic colour = engine displacement. Title should be “Relationship between No. of Cylinders and Engine Displacement”.
+a. Show the codes and its result.
+```{r, include= TRUE}
+  ggplot(data = mpg_data , mapping = aes(x = displ, y = cyl, main = "Relationship 
+                                    between No of Cylinders and 
+                                    Engine Displacement")) + 
+  geom_point(mapping=aes(colour = "engine displacement")) 
+```
+\hfill\break
+b. How would you describe its relationship?
+ans - the scatter plot shows that the cyl is in y axis and the displ are in the x axis
+to easily distinguish the clustered data, wchich indicate the engine displacement.
+
+\hfill\break
+6. Get the total number of observations for drv - type of drive train (f = front-wheel drive,
+r = rear wheel drive, 4 = 4wd) and class - type of class (Example: suv, 2seater, etc.).
+
+Plot using the geom_tile() where the number of observations for class be used as a fill for aesthetics.
+a. Show the codes and its result for the narrative in #6.
+```{r, include= TRUE}
+  ggplot(data = mpg_data, mapping = aes(x = drv, y = class)) +
+    geom_tile(aes(fill=class))
+```
+\hfill\break
+b. Interpret the result.
+ans - by mapping a geometric tile, it graph the data in a tile graph that was shown in diffrent colors, the drv are in the X axis while the class are in the Y axis.
+\hfill\break
+7. Discuss the difference between these codes. Its outputs for each are shown below.
+ans - the graph are almost the same but the first code are much easier to analyze since it has a legend that can distinguish the jittered data while the second code are only in a graph that has a color blue.
+```{r, include= TRUE}
+#first code
+  ggplot(data = mpg) +
+    geom_point(mapping = aes(x = displ, y = hwy, colour = "blue"))
+```
+
+```{r, include= TRUE}
+#second code
+  ggplot(data = mpg) +
+    geom_point(mapping = aes(x = displ, y = hwy), colour = "blue")
+```  
+\hfill\break
+8. Try to run the command ?mpg. What is the result of this command? ans - the result are in the help option, it shows the description for the data set of mpg.
+```{r, include= TRUE}
+  cmd1 <-?mpg
+  cmd1
+```
+a. Which variables from mpg dataset are categorical? ans - the manufacturer, model, trans, drv, fl, class are the categorical variables from the data-set of mpg.
+  
+b. Which are continuous variables?
+ans - the consinuous variable of the mpg data-set are the dsipl, year, cyl, cty, and hwy.
+  
+c. Plot the relationship between displ (engine displacement) and hwy(highway miles per gallon). 
+Mapped it with a continuous variable you have identified in #5-b. What is its result? Why it produced such output? ans - the data the have been graph shows that they are in the positive rate using the displ for hwy and cty scattered plot.
+
+```{r, include= TRUE}
+  ggplot(mpg, aes(x = cty, y = hwy, colour = displ)) + geom_point()
+```
+\hfill\break
+9. Plot the relationship between displ (engine displacement) and hwy(highway miles per gallon) using geom_point(). Add a trend line over the existing plot using geom_smooth() with se = FALSE. Default method is “loess”.
+```{r, include= TRUE}
+  ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+    geom_point(mapping=aes(color=class)) +
+    geom_smooth(se = FALSE)
+``` 
+\hfill\break
+10. Using the relationship of displ and hwy, add a trend line over existing 
+plot. Set these = FALSE to remove the confidence interval and method = lm to check for linear modeling.
+```{r, include= TRUE}
+  ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = class)) +
+    geom_point() +
+    geom_smooth(se = FALSE, method = lm)
+```
